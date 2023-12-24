@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $body = "Name: $name\nEmail: $email\n\nMessage:\n$message";
 
     // Set recipient email address
-    $to = "solankimanohar2176@gmail.com"; // Replace with your actual email address
+    $to = "solankimanohar2176@gmail.com";
 
     // Set additional headers
     $headers = "From: $email";
