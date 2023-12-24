@@ -1,4 +1,10 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'path/to/PHPMailer/src/Exception.php';
+require 'path/to/PHPMailer/src/PHPMailer.php';
+require 'path/to/PHPMailer/src/SMTP.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get form data
@@ -16,12 +22,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Set additional headers
     $headers = "From: $email";
 
-    // Send email
-    $success = mail($to, $subject, $body, $headers);
+    // Initialize PHPMailer
+    $mail = new PHPMailer(true);
 
-    if ($success) {
+    try {
+        // Set SMTP settings
+        $mail->isSMTP();
+        $mail->Host = 'your-smtp-server.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'your-smtp-username';
+        $mail->Password = 'your-smtp-password';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        // Set email content
+        $mail->setFrom($email);
+        $mail->addAddress($to);
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+
+        // Send email
+        $mail->send();
+
         echo "Thank you for contacting us! We will get back to you soon.";
-    } else {
+    } catch (Exception $e) {
+        // Log the error
+        error_log("Email error: {$mail->ErrorInfo}");
+
         echo "Oops! Something went wrong and we couldn't send your message.";
     }
 } else {
