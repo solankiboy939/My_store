@@ -1,7 +1,6 @@
 <?php
 // Check for form submission
-if (isset($_POST['submit'])) {
-
+if ($_SERVER["REQUEST_METHOD"] == "POST")
   // Sanitize user input
   $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
   $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
