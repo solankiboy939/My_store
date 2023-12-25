@@ -1,24 +1,31 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["name"];
-    $email = $_POST["email"];
-    $phone = $_POST["phone"];
-    $message = $_POST["message"];
+// Check for form submission
+if (isset($_POST['submit'])) {
 
-    $to = "solankimanohar2176@gmail.com"; // Replace with your Gmail address
-    $subject = "New Contact Form Submission";
-    $headers = "From: $email";
+  // Sanitize user input
+  $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+  $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+  $message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
 
-    $mailBody = "Name: $name\n";
-    $mailBody .= "Email: $email\n";
-    $mailBody .= "Phone: $phone\n\n";
-    $mailBody .= "Message:\n$message";
+  // Validate form fields
+  if (empty($name) || empty($email) || empty($message)) {
+    echo 'Please fill in all required fields.';
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo 'Please enter a valid email address.';
+  } else {
+    // Prepare email content
+    $to = 'solankimanohar2176@gmail.com';  // Replace with your email address
+    $subject = 'Contact Form Submission';
+    $body = "Name: $name\nEmail: $email\nMessage:\n$message";
+    $headers = 'From: from_email@example.com' . "\r\n";  // Replace with sender email
 
-    // Send email
-    mail($to, $subject, $mailBody, $headers);
-
-    // Redirect to a thank you page
-    header("Location: thank_you.html");
-    exit();
+    // Send email using PHP's mail() function
+    if (mail($to, $subject, $body, $headers)) {
+      echo 'Message sent successfully!';
+        // header('Location: thankyou.html');
+    } else {
+      echo 'Message could not be sent.';
+    }
+  }
 }
 ?>
