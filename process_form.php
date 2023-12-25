@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $to = "solankimanohar2176@gmail.com"; // Replace with your Gmail address
     $subject = "New Contact Form Submission";
-    $headers = "From: $name <$email>";
+    $headers = "From: $email";
 
     $mailBody = "Name: $name\n";
     $mailBody .= "Email: $email\n";
@@ -16,5 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Send email
     mail($to, $subject, $mailBody, $headers);
+
+    // Redirect to a thank you page
+    header("Location: thank_you.html");
+    exit();
 }
 ?>
